@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode and Text Copier (as Image)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        #barcodeSvg {
+            display: block; /* Ensures SVG takes up block space for layout */
+            max-width: 100%; /* Makes SVG responsive */
+            height: auto;
+        }
+        /* For the fallback image display */
+        #fallbackImageContainer {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px dashed #cbd5e1; /* Tailwind gray-300 */
+            border-radius: 0.5rem; /* Tailwind rounded-lg */
+            background-color: #f9fafb; /* Tailwind gray-50 */
+        }
+        #fallbackImage {
+            display: block;
+            margin: 0.5rem auto;
+            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+            max-width: 100%;
+            border-radius: 0.25rem; /* Tailwind rounded-md */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">Barcode & Text Copier</h1>
+
+        <div class="mb-6">
+            <label for="barcodeData" class="block text-sm font-medium text-gray-700 mb-1">Text for Barcode:</label>
+            <input type="text" id="barcodeData" name="barcodeData"
+                   class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                   placeholder="Enter data for barcode">
+        </div>
+
+        <div class="mb-6">
+            <label for="additionalText" class="block text-sm font-medium text-gray-700 mb-1">Additional Text:</label>
+            <textarea id="additionalText" name="additionalText" rows="3"
+                      class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter any accompanying text"></textarea>
+        </div>
+
+        <div id="displayArea" class="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50 min-h-[100px]">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2 text-center">Preview</h3>
+            <div class="flex flex-col items-center space-y-4">
+                <svg id="barcodeSvg" class="max-w-full h-auto"></svg>
+                <p id="displayText" class="text-gray-600 text-center break-words"></p>
+            </div>
+            <p id="barcodeError" class="text-red-500 text-sm text-center mt-2"></p>
+        </div>
+
+        <button id="copyButton"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out disabled:opacity-50">
+            Copy as Image
+        </button>
+
+        <p id="statusMessage" class="text-center text-green-600 mt-4 text-sm font-medium h-5"></p>
+
+        <div id="fallbackImageContainer" class="hidden">
+            <p class="text-sm text-gray-600 text-center">Right-click the image below and 'Copy Image':</p>
+            <img id="fallbackImage" alt="Combined Barcode and Text"/>
+        </div>
+    </div>
+
+    <script>
+        const barcodeDataInput = document.getElementById('barcodeData');
+        const additionalTextInput = document.getElementById('additionalText');
+        const barcodeSvgElement = document.getElementById('barcodeSvg');
+        const displayTextElement = document.getElementById('displayText');
+        const copyButton = document.getElementById('copyButton');
+        const statusMessage = document.getElementById('statusMessage');
+        const barcodeErrorElement = document.getElementById('barcodeError');
+        const fallbackImageContainer = document.getElementById('fallbackImageContainer');
+        const fallbackImageElement = document.getElementById('fallbackImage');
+
+        function generateBarcode() {
+            const data = barcodeDataInput.value.trim();
+            barcodeErrorElement.textContent = ''; // Clear previous errors
+            fallbackImageContainer.classList.add('hidden'); // Hide fallback on new generation
+
+            if (data) {
+                try {
+                    JsBarcode(barcodeSvgElement, data, {
+                        format: "CODE128",
+                        lineColor: "#000",
+                        width: 2,
+                        height: 80,
+                        displayValue: true, // Shows data text within the barcode SVG
+                        textMargin: 5,
+                        fontSize: 16,
+                        margin: 10
+                    });
+                    barcodeSvgElement.classList.remove('hidden');
+                } catch (e) {
+                    console.error("Barcode generation error:", e);
+                    barcodeSvgElement.innerHTML = '';
+                    barcodeSvgElement.classList.add('hidden');
+                    barcodeErrorElement.textContent = 'Invalid characters for barcode.';
+                }
+            } else {
+                barcodeSvgElement.innerHTML = '';
+                barcodeSvgElement.classList.add('hidden');
+            }
+            updateCopyButtonState();
+        }
+
+        function updateDisplayText() {
+            displayTextElement.textContent = additionalTextInput.value;
+            updateCopyButtonState();
+            fallbackImageContainer.classList.add('hidden'); // Hide fallback on text change
+        }
+
+        function updateCopyButtonState() {
+            const hasBarcode = barcodeSvgElement.innerHTML.trim() !== '' && !barcodeErrorElement.textContent;
+            const hasText = additionalTextInput.value.trim() !== '';
+            copyButton.disabled = !(hasBarcode || hasText);
+        }
+
+        barcodeDataInput.addEventListener('input', generateBarcode);
+        additionalTextInput.addEventListener('input', updateDisplayText);
+
+        copyButton.addEventListener('click', async () => {
+            statusMessage.textContent = '';
+            fallbackImageContainer.classList.add('hidden'); // Hide previous fallback
+
+            const hasBarcode = barcodeSvgElement.innerHTML.trim() !== '' && !barcodeErrorElement.textContent;
+            const additionalText = additionalTextInput.value.trim();
+
+            if (!hasBarcode && !additionalText) {
+                statusMessage.textContent = 'Nothing to copy.';
+                statusMessage.className = 'text-center text-red-600 mt-4 text-sm font-medium h-5';
+                setTimeout(() => statusMessage.textContent = '', 3000);
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            let barcodeImage = null;
+
+            // 1. Load barcode SVG as an image if it exists
+            if (hasBarcode) {
+                const svgXml = new XMLSerializer().serializeToString(barcodeSvgElement);
+                const svgDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`;
+                const img = new Image();
+                try {
+                    await new Promise((resolve, reject) => {
+                        img.onload = () => { barcodeImage = img; resolve(); };
+                        img.onerror = (e) => { console.error("Failed to load SVG as image:", e); reject(new Error("Failed to load barcode image.")); };
+                        img.src = svgDataUrl;
+                    });
+                } catch (error) {
+                    statusMessage.textContent = error.message;
+                    statusMessage.className = 'text-center text-red-600 mt-4 text-sm font-medium h-5';
+                    setTimeout(() => statusMessage.textContent = '', 3000);
+                    return;
+                }
+            }
+
+            // --- Calculate canvas dimensions ---
+            const padding = 20;
+            const textLineHeight = 24;
+            const textFontSize = 16;
+            // MODIFIED LINE: Added "bold" to the font definition
+            const textFont = `bold ${textFontSize}px Inter, sans-serif`;
+            ctx.font = textFont; // Set font early for measurements
+
+            let canvasWidth = padding * 2;
+            let canvasHeight = padding * 2;
+            let barcodeDisplayHeight = 0;
+            let barcodeDisplayWidth = 0;
+
+            if (barcodeImage) {
+                barcodeDisplayWidth = barcodeImage.width;
+                barcodeDisplayHeight = barcodeImage.height;
+                canvasWidth = Math.max(canvasWidth, barcodeDisplayWidth + padding * 2);
+                canvasHeight += barcodeDisplayHeight;
+            }
+
+            let textLines = [];
+            let textBlockHeight = 0;
+            let maxTextLineWidth = 0;
+
+            if (additionalText) {
+                const words = additionalText.split(/(\s+)/);
+                let currentLine = '';
+                const targetTextWidth = barcodeDisplayWidth > 0 ? barcodeDisplayWidth : (300 - padding * 2);
+                for (const word of words) {
+                    const testLine = currentLine + word;
+                    const metrics = ctx.measureText(testLine.trim());
+                    if (metrics.width > targetTextWidth && currentLine.trim() !== '') {
+                        textLines.push(currentLine.trim());
+                        currentLine = word;
+                    } else { currentLine = testLine; }
+                }
+                if (currentLine.trim() !== '') { textLines.push(currentLine.trim()); }
+
+                textBlockHeight = textLines.length * textLineHeight;
+                if (barcodeImage && additionalText) canvasHeight += 2; // Reduced gap
+                canvasHeight += textBlockHeight;
+                textLines.forEach(line => { maxTextLineWidth = Math.max(maxTextLineWidth, ctx.measureText(line).width); });
+                canvasWidth = Math.max(canvasWidth, maxTextLineWidth + padding * 2);
+            }
+            
+            if (!barcodeImage && additionalText && maxTextLineWidth === 0 && textLines.length > 0) {
+                 maxTextLineWidth = ctx.measureText(textLines[0]).width;
+                 canvasWidth = Math.max(canvasWidth, maxTextLineWidth + padding * 2);
+            }
+            if (canvasWidth <= padding * 2) canvasWidth = 300;
+            if (canvasHeight <= padding * 2) canvasHeight = 100;
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            // --- Draw on canvas ---
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            let currentY = padding;
+            if (barcodeImage) {
+                const barcodeX = (canvas.width - barcodeDisplayWidth) / 2;
+                ctx.drawImage(barcodeImage, barcodeX, currentY, barcodeDisplayWidth, barcodeDisplayHeight);
+                currentY += barcodeDisplayHeight;
+            }
+            if (additionalText) {
+                if (barcodeImage) currentY += 2; // Reduced space between barcode and text
+                ctx.fillStyle = '#374151';
+                // Ensure the font is set correctly before drawing text
+                ctx.font = textFont; 
+                ctx.textAlign = 'center';
+                const textStartX = canvas.width / 2;
+                textLines.forEach((line, index) => {
+                    ctx.fillText(line, textStartX, currentY + (index * textLineHeight) + (textLineHeight / 2) - (textFontSize / 4));
+                });
+            }
+
+            const dataUrl = canvas.toDataURL('image/png');
+            let copiedSuccessfully = false;
+
+            // --- Attempt 1: Copy to clipboard using navigator.clipboard.write ---
+            try {
+                const blob = await new Promise((resolve, reject) => {
+                    canvas.toBlob(blobVal => {
+                        if (blobVal) resolve(blobVal);
+                        else reject(new Error('Canvas toBlob returned null.'));
+                    }, 'image/png');
+                });
+                await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                statusMessage.textContent = 'Image copied to clipboard!';
+                statusMessage.className = 'text-center text-green-600 mt-4 text-sm font-medium h-5';
+                copiedSuccessfully = true;
+            } catch (navClipboardError) {
+                console.warn('navigator.clipboard.write failed (may be due to iframe permissions):', navClipboardError.message);
+                
+                // --- Attempt 2: Fallback to document.execCommand('copy') ---
+                const imgForExecCommand = new Image();
+                const execCommandPromise = new Promise((resolveExec, rejectExec) => {
+                    imgForExecCommand.onload = () => {
+                        const tempCopyArea = document.createElement('div');
+                        tempCopyArea.contentEditable = 'true';
+                        tempCopyArea.style.position = 'fixed';
+                        tempCopyArea.style.left = '-9999px';
+                        tempCopyArea.style.top = '-9999px';
+                        tempCopyArea.appendChild(imgForExecCommand);
+                        document.body.appendChild(tempCopyArea);
+                        
+                        tempCopyArea.focus();
+                        const range = document.createRange();
+                        range.selectNodeContents(tempCopyArea);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+
+                        let commandSuccess = false;
+                        try {
+                            if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+                                commandSuccess = document.execCommand('copy');
+                            }
+                            if (commandSuccess) {
+                                resolveExec();
+                            } else {
+                                rejectExec(new Error('document.execCommand("copy") returned false or was not supported.'));
+                            }
+                        } catch (e) {
+                            rejectExec(e);
+                        } finally {
+                            selection.removeAllRanges();
+                            document.body.removeChild(tempCopyArea);
+                        }
+                    };
+                    imgForExecCommand.onerror = () => rejectExec(new Error('Image for execCommand failed to load.'));
+                    imgForExecCommand.src = dataUrl;
+                });
+
+                try {
+                    await execCommandPromise;
+                    statusMessage.textContent = 'Image copied! (using fallback method)';
+                    statusMessage.className = 'text-center text-green-600 mt-4 text-sm font-medium h-5';
+                    copiedSuccessfully = true;
+                } catch (execCommandError) {
+                    console.error('document.execCommand("copy") also failed:', execCommandError.message);
+                    // --- Final Fallback: Display image for manual copy ---
+                    statusMessage.textContent = 'Auto-copy failed. Please right-click image below to copy.';
+                    statusMessage.className = 'text-center text-red-600 mt-4 text-sm font-medium h-5';
+                    fallbackImageElement.src = dataUrl;
+                    fallbackImageContainer.classList.remove('hidden');
+                }
+            }
+
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                 // Keep fallback visible if copy failed, otherwise it's already hidden or not needed.
+                if (!copiedSuccessfully && !fallbackImageContainer.classList.contains('hidden')) {
+                    // It's already visible, no action needed to hide it yet.
+                } else if (copiedSuccessfully) {
+                    fallbackImageContainer.classList.add('hidden'); // Hide if copy was successful
+                }
+            }, 7000);
+        });
+
+        // Initial generation and display update
+        generateBarcode();
+        updateDisplayText();
+    </script>
+</body>
+</html>
