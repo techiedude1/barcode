@@ -333,7 +333,14 @@
     </script>
 
 
- <meta charset="UTF-8">
+<br>
+
+
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   <title>Barcode + Text Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <style>
@@ -353,7 +360,7 @@
 <body>
   <div class="container">
     <div class="title">Barcode + Text Generator</div>
-    <input id="barcodeValue" class="input" type="text" placeholder="Enter value for barcode..." autocomplete="off" maxlength="11">
+    <input id="barcodeValue" class="input" type="text" placeholder="Enter value for barcode..." autocomplete="off">
     <input id="textValue" class="input" type="text" placeholder="Enter display text..." autocomplete="off">
     <div id="barcode-wrapper" style="display:none;">
       <svg id="barcode" width="260" height="60"></svg>
@@ -377,20 +384,33 @@
     const numberLineHeight = 22; // px
     const textLineHeight = 21;   // px
 
-    function formatBarcodeNumber(num) {
-      let digits = num.replace(/\D/g, '').padEnd(11, '0').substring(0,11);
-      return digits.replace(/(\d{5})(\d{4})(\d{2})/, '$1-$2-$3');
+    // Format as 12345-1234-12 for first 11 digits only, show the rest as extra (optional tweak)
+    function formatBarcodeNumber(input) {
+      const digits = input.replace(/\D/g, '');
+      if (digits.length >= 11) {
+        const first11 = digits.substring(0, 11);
+        let formatted = first11.replace(/(\d{5})(\d{4})(\d{2})/, '$1-$2-$3');
+        if (digits.length > 11) {
+          formatted += '-' + digits.substring(11); // add remainder if input is longer
+        }
+        return formatted;
+      }
+      return input; // If less than 11 digits, just show what the user typed
     }
 
     function renderBarcode() {
-      const val = barcodeInput.value.replace(/\D/g, '').substring(0,11);
-      barcodeInput.value = val;
+      const val = barcodeInput.value; // Accept any length, any characters
       if (val.length > 0) {
-        JsBarcode(barcodeSVG, val, { format: "CODE128", displayValue: false, width: 2, height: barcodeHeight, margin: 0 });
-        barcodeWrapper.style.display = "flex";
-        barcodeNumber.textContent = formatBarcodeNumber(val);
-        displayText.textContent = textInput.value;
-        copyBtn.disabled = false;
+        try {
+          JsBarcode(barcodeSVG, val, { format: "CODE128", displayValue: false, width: 2, height: barcodeHeight, margin: 0 });
+          barcodeWrapper.style.display = "flex";
+          barcodeNumber.textContent = formatBarcodeNumber(val);
+          displayText.textContent = textInput.value;
+          copyBtn.disabled = false;
+        } catch(e) {
+          barcodeWrapper.style.display = "none";
+          copyBtn.disabled = true;
+        }
       } else {
         barcodeWrapper.style.display = "none";
         copyBtn.disabled = true;
@@ -411,7 +431,6 @@
 
       img.onload = async function() {
         const w = 260, h = barcodeHeight;
-        // Only enough height for barcode + number line + text line
         const canvas = document.createElement('canvas');
         canvas.width = w;
         canvas.height = h + numberLineHeight + textLineHeight;
@@ -444,6 +463,7 @@
       };
     });
   </script>
+
 
 
     
