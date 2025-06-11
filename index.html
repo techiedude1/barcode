@@ -335,10 +335,6 @@
 
 <br>
 
-
-    <!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8">
   <title>Barcode + Text Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
@@ -455,6 +451,189 @@
   </script>
     
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Barcode + Text Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; background: #f0f9ff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { background: #fff; padding: 32px 24px; border-radius: 20px; box-shadow: 0 6px 36px rgba(0,0,0,0.08); max-width: 420px; width: 100%; }
+    .title { font-size: 1.5rem; font-weight: 700; color: #2563eb; margin-bottom: 18px; text-align: center; }
+    .input { font-size: 1rem; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; width: 100%; margin-bottom: 14px; }
+    .row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .row label { font-weight: 600; margin-right: 6px; }
+    .row input { width: 100px; border-bottom: 2px solid #aaa; border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 2px 4px; font-size: 1rem; margin-bottom: 0;}
+    #barcode-wrapper { display: flex; flex-direction: column; align-items: center; margin: 16px 0 0 0;}
+    #barcodeNumber { margin-top: 4px; font-size: 1.1rem; font-weight: 600; color: #f59e42; letter-spacing: 2px;}
+    #displayText { margin-top: 6px; font-weight: 600; font-size: 1.05rem; color: #334155; }
+    #exp-lot-row { margin-top: 8px; width: 100%; display: flex; justify-content: center; gap: 30px;}
+    .btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .notice { color: #64748b; font-size: 0.87rem; margin-top: 8px; text-align: center; }
+    svg#barcode { width: 320px; height: 60px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Barcode + Text Generator</div>
+    <input id="barcodeValue" class="input" type="text" placeholder="Enter value for barcode..." autocomplete="off">
+    <input id="textValue" class="input" type="text" placeholder="Enter display text..." autocomplete="off">
+    <div class="row" id="exp-lot-inputs">
+      <label for="expValue">EXP:</label>
+      <input id="expValue" type="text" maxlength="15" placeholder="MM/YYYY">
+      <label for="lotValue">LOT#:</label>
+      <input id="lotValue" type="text" maxlength="20" placeholder="">
+    </div>
+    <div id="barcode-wrapper" style="display:none;">
+      <svg id="barcode" width="320" height="60"></svg>
+      <div id="barcodeNumber"></div>
+      <div id="displayText"></div>
+      <div id="exp-lot-row">
+        <span><b>EXP:</b> <span id="expOut" style="display:inline-block;min-width:80px;border-bottom:1.5px solid #aaa;">&nbsp;</span></span>
+        <span><b>LOT#:</b> <span id="lotOut" style="display:inline-block;min-width:90px;border-bottom:1.5px solid #aaa;">&nbsp;</span></span>
+      </div>
+    </div>
+    <button class="btn" id="copyBtn" disabled>Copy Barcode & Text as Image</button>
+    <div class="notice">Paste directly where image pasting is supported (Docs, email, chat, etc.)</div>
+  </div>
+  <script>
+    const barcodeInput = document.getElementById('barcodeValue');
+    const textInput = document.getElementById('textValue');
+    const expInput = document.getElementById('expValue');
+    const lotInput = document.getElementById('lotValue');
+    const barcodeWrapper = document.getElementById('barcode-wrapper');
+    const barcodeSVG = document.getElementById('barcode');
+    const barcodeNumber = document.getElementById('barcodeNumber');
+    const displayText = document.getElementById('displayText');
+    const expOut = document.getElementById('expOut');
+    const lotOut = document.getElementById('lotOut');
+    const copyBtn = document.getElementById('copyBtn');
+
+    // Font metrics
+    const barcodeHeight = 60;
+    const numberLineHeight = 22; // px
+    const textLineHeight = 21;   // px
+    const expLotLineHeight = 26; // px
+
+    // Show digits only, no hyphens
+    function formatBarcodeNumber(input) {
+      return input.replace(/\D/g, '');
+    }
+
+    function renderBarcode() {
+      const val = barcodeInput.value;
+      if (val.length > 0) {
+        try {
+          JsBarcode(barcodeSVG, val, { format: "CODE128", displayValue: false, width: 2, height: barcodeHeight, margin: 0 });
+          barcodeWrapper.style.display = "flex";
+          barcodeNumber.textContent = formatBarcodeNumber(val);
+          displayText.textContent = textInput.value;
+          expOut.textContent = expInput.value || '\u00A0';
+          lotOut.textContent = lotInput.value || '\u00A0';
+          copyBtn.disabled = false;
+        } catch(e) {
+          barcodeWrapper.style.display = "none";
+          copyBtn.disabled = true;
+        }
+      } else {
+        barcodeWrapper.style.display = "none";
+        copyBtn.disabled = true;
+      }
+    }
+
+    barcodeInput.addEventListener('input', renderBarcode);
+    textInput.addEventListener('input', renderBarcode);
+    expInput.addEventListener('input', renderBarcode);
+    lotInput.addEventListener('input', renderBarcode);
+
+    copyBtn.addEventListener('click', async () => {
+      const svgString = new XMLSerializer().serializeToString(barcodeSVG);
+      const img = new window.Image();
+      const svgBlob = new Blob([svgString], {type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(svgBlob);
+      img.src = url;
+
+      img.onload = async function() {
+        const w = 320, h = barcodeHeight;
+        // Height: barcode + number + displayText + exp/lot (each on its own line)
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h + numberLineHeight + textLineHeight + expLotLineHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw barcode
+        ctx.drawImage(img, 0, 0, w, h);
+
+        // Draw barcode number (orange)
+        ctx.font = "bold 18px Inter, Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#f59e42";
+        ctx.fillText(barcodeNumber.textContent, w/2, h + numberLineHeight - 5);
+
+        // Draw display text (slate/dark)
+        ctx.font = "bold 17px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#334155";
+        ctx.fillText(displayText.textContent, w/2, h + numberLineHeight + textLineHeight - 8);
+
+        // Draw EXP and LOT fields (left and right, on one line, underlined)
+        ctx.font = "bold 16px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#222";
+        ctx.textAlign = "left";
+        const expLabel = "EXP:";
+        const lotLabel = "LOT#:";
+        const expVal = expInput.value || '';
+        const lotVal = lotInput.value || '';
+        // Positions
+        const expX = 30, lotX = w/2 + 20;
+        const lineY = h + numberLineHeight + textLineHeight + expLotLineHeight - 10;
+
+        ctx.fillText(expLabel, expX, lineY);
+        // Draw exp field with line
+        ctx.font = "16px Inter, Arial, sans-serif";
+        ctx.fillText(expVal, expX + 45, lineY);
+        const expWidth = Math.max(ctx.measureText(expVal||'MM/YYYY').width, 60);
+        ctx.beginPath();
+        ctx.moveTo(expX + 43, lineY + 2);
+        ctx.lineTo(expX + 43 + expWidth + 5, lineY + 2);
+        ctx.strokeStyle = "#aaa";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw lot field with line
+        ctx.font = "bold 16px Inter, Arial, sans-serif";
+        ctx.fillText(lotLabel, lotX, lineY);
+        ctx.font = "16px Inter, Arial, sans-serif";
+        ctx.fillText(lotVal, lotX + 60, lineY);
+        const lotWidth = Math.max(ctx.measureText(lotVal||'').width, 65);
+        ctx.beginPath();
+        ctx.moveTo(lotX + 57, lineY + 2);
+        ctx.lineTo(lotX + 57 + lotWidth + 5, lineY + 2);
+        ctx.strokeStyle = "#aaa";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        canvas.toBlob(async (blob) => {
+          try {
+            await navigator.clipboard.write([new window.ClipboardItem({ [blob.type]: blob })]);
+            copyBtn.textContent = "Copied!";
+            setTimeout(()=>{copyBtn.textContent = "Copy Barcode & Text as Image"}, 1300);
+          } catch(e) {
+            alert("Copy failed. Try right-clicking the image to copy.");
+          }
+          URL.revokeObjectURL(url);
+        });
+      };
+    });
+  </script>
+
+    
+
+
+    
 
     
     <a href="https://techiedude1.github.io/Curious/" 
