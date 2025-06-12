@@ -43,7 +43,6 @@
     .t4-notice { color: #64748b; font-size: 0.87rem; margin-top: 8px; text-align: center; }
     #t4-barcodePreview { display: block; margin: 0 auto 10px auto; background: #fff; }
   </style>
-  <link rel="icon" type="image/svg+xml" href="images/barcode-favicon.svg">
 </head>
 <body>
   <div class="main-title">Barcode & Label Tools</div>
