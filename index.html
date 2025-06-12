@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>All-in-One Barcode & Label Generator</title>
+  <title>All Barcode & Label Tools</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Fonts for all tools -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <style>
@@ -12,11 +11,8 @@
     .main-title { font-size: 2.1rem; font-weight: 800; color: #374151; margin-top: 2.2rem; text-align: center; letter-spacing: .02em;}
     .tools-container { display: flex; flex-wrap: wrap; gap: 38px; justify-content: center; align-items: flex-start; margin: 2.3rem 0 2.7rem 0;}
     .barcode-tool { background: #fff; padding: 32px 22px 28px 22px; border-radius: 20px; box-shadow: 0 6px 28px rgba(0,0,0,0.07); width: 375px; max-width: 98vw; margin-bottom: 1.2rem; }
-    .tool-title { font-size: 1.25rem; font-weight: 700; color: #2563eb; margin-bottom: 13px; text-align: center; }
+    .tool-title { font-size: 1.22rem; font-weight: 700; color: #2563eb; margin-bottom: 13px; text-align: center; }
     .input { font-size: 1rem; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; width: 100%; margin-bottom: 12px; }
-    .row { display: flex; gap: 12px; margin-bottom: 12px; }
-    .row label { font-weight: 600; margin-right: 6px; }
-    .row input { width: 100px; border-bottom: 2px solid #aaa; border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 2px 4px; font-size: 1rem; margin-bottom: 0;}
     .barcode-preview { display: flex; flex-direction: column; align-items: center; margin: 16px 0 0 0;}
     .barcode-number { margin-top: 4px; font-size: 1.1rem; font-weight: 600; color: #f59e42; letter-spacing: 2px;}
     .display-text { margin-top: 6px; font-weight: 600; font-size: 1.05rem; color: #334155; }
@@ -24,25 +20,32 @@
     .btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: background .2s; }
     .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
     .notice { color: #64748b; font-size: 0.89rem; margin-top: 8px; text-align: center; }
-    .divider { height: 2.2rem; }
-    svg { display: block; }
-    /* For fallback image in Tool 1 */
     .fallback-img-container { margin-top: 1.1rem; padding: 1rem; border: 1px dashed #cbd5e1; border-radius: 0.5rem; background-color: #f9fafb; text-align: center;}
     .fallback-img { display: block; margin: 0.5rem auto; border: 1px solid #e5e7eb; max-width: 100%; border-radius: 0.25rem; }
-    /* Tool 4 styles */
-    .custom-label-tool { background: #fff; padding: 32px 24px; border-radius: 20px; box-shadow: 0 6px 36px rgba(0,0,0,0.08); max-width: 430px; width: 100%; }
-    .custom-label-title { font-size: 1.1rem; font-weight: 700; color: #2563eb; margin-bottom: 18px; text-align: center; }
-    .inputrow { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
-    .lbl { font-weight: 600; }
-    .fill { border: none; border-bottom: 2px solid #aaa; background: none; font-size: 1rem; min-width: 40px; text-align: center; outline: none; margin: 0 3px; }
-    .fill:focus { border-color: #2563eb; }
-    .copy-btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 12px; }
-    .copy-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-    .custom-label-notice { color: #64748b; font-size: 0.87rem; margin-top: 8px; text-align: center; }
+    .row-exp-lot { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+    .exp-lot-label { font-weight: 600; }
+    .exp-lot-input { font-size: 1rem; padding: 6px 7px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 90px; margin-left: 2px; }
+    .exp-lot-input:focus { border-color: #2563eb; outline: none; }
+
+    /* Tool 4 Only */
+    .tool4-title { font-size: 1.13rem; font-weight: 700; color: #2563eb; margin-bottom: 13px; text-align: center; }
+    .t4-container { background: #fff; padding: 30px 18px 20px 18px; border-radius: 20px; box-shadow: 0 6px 28px rgba(0,0,0,0.07); max-width: 410px; margin: 0 auto; }
+    .t4-inputrow { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
+    .t4-lbl { font-weight: 600; }
+    .t4-fill {
+      border: none; border-bottom: 2px solid #aaa; background: none; font-size: 1rem; font-weight: bold;
+      min-width: 40px; text-align: center; outline: none; margin: 0 3px; transition: width 0.2s; height: 2.2em; line-height: 2.2em;
+      padding: 2px 6px 2px 6px; box-sizing: border-box;
+    }
+    .t4-fill:focus { border-color: #2563eb; }
+    .t4-copy-btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+    .t4-copy-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .t4-notice { color: #64748b; font-size: 0.87rem; margin-top: 8px; text-align: center; }
+    #t4-barcodePreview { display: block; margin: 0 auto 10px auto; background: #fff; }
   </style>
 </head>
 <body>
-  <div class="main-title">All-in-One Barcode & Label Generator</div>
+  <div class="main-title">Barcode & Label Tools</div>
   <div class="tools-container">
 
     <!-- TOOL 1 -->
@@ -79,56 +82,61 @@
     <!-- TOOL 3 -->
     <div class="barcode-tool">
       <div class="tool-title">Barcode + Text + EXP/LOT</div>
-      <input id="t3-barcode" class="input" type="text" placeholder="Enter value for barcode..." autocomplete="off">
-      <input id="t3-text" class="input" type="text" placeholder="Enter display text..." autocomplete="off">
-      <div class="row">
-        <label for="t3-exp">EXP:</label>
-        <input id="t3-exp" type="text" maxlength="15" placeholder="MM/YYYY">
-        <label for="t3-lot">LOT#:</label>
-        <input id="t3-lot" type="text" maxlength="20" placeholder="">
+      <input id="t3-barcode" class="input" type="text" placeholder="Barcode value..." autocomplete="off">
+      <input id="t3-text" class="input" type="text" placeholder="Display text..." autocomplete="off">
+      <div class="row-exp-lot">
+        <label class="exp-lot-label" for="t3-exp">EXP:</label>
+        <input id="t3-exp" class="exp-lot-input" type="text" maxlength="16" placeholder="MM/YYYY">
+        <label class="exp-lot-label" for="t3-lot">LOT#</label>
+        <input id="t3-lot" class="exp-lot-input" type="text" maxlength="16" placeholder="">
       </div>
       <div id="t3-preview" class="barcode-preview" style="display:none;">
         <svg id="t3-barcode-svg" width="320" height="60"></svg>
         <div id="t3-barnum" class="barcode-number"></div>
         <div id="t3-displaytext" class="display-text"></div>
-        <div class="exp-lot-row">
+        <div style="display:flex;justify-content:center;gap:36px;margin-top:7px;">
           <span><b>EXP:</b> <span id="t3-expout" style="display:inline-block;min-width:80px;border-bottom:1.5px solid #aaa;">&nbsp;</span></span>
           <span><b>LOT#:</b> <span id="t3-lotout" style="display:inline-block;min-width:90px;border-bottom:1.5px solid #aaa;">&nbsp;</span></span>
         </div>
       </div>
       <button class="btn" id="t3-copybtn" disabled>Copy Barcode & Text as Image</button>
-      <div class="notice">Paste directly where image pasting is supported (Docs, email, chat, etc.)</div>
+      <div class="notice">EXP and LOT fields included in copied image.</div>
     </div>
+  </div>
 
-    <!-- TOOL 4: Centered Custom Label Generator -->
-    <div class="custom-label-tool">
-      <div class="custom-label-title">Centered Custom Label Generator</div>
-      <div class="inputrow">
-        <input id="c4-line1" class="fill" type="text" style="width:360px;" maxlength="48" placeholder=" " autocomplete="off">
-      </div>
-      <div class="inputrow">
-        <input id="c4-mgVal" class="fill" type="text" maxlength="10" style="width:75px;">
-        <span class="lbl" style="margin-left:6px;margin-right:6px;">mg PER</span>
-        <input id="c4-mlVal" class="fill" type="text" maxlength="10" style="width:75px;">
-        <span class="lbl" style="margin-left:6px;">mL</span>
-      </div>
-      <div class="inputrow">
-        <span class="lbl">LOT#</span>
-        <input id="c4-lotVal" class="fill" type="text" maxlength="15" style="width:80px;">
-        <span class="lbl" style="margin-left:12px;">MAN:</span>
-        <input id="c4-manVal" class="fill" type="text" maxlength="14" style="width:90px;">
-      </div>
-      <div class="inputrow">
-        <span class="lbl">EXP:</span>
-        <input id="c4-expMonth" class="fill" type="text" maxlength="2" style="width:34px;">
-        <span class="lbl">/</span>
-        <input id="c4-expDay" class="fill" type="text" maxlength="2" style="width:34px;">
-        <span class="lbl">/</span>
-        <input id="c4-expYear" class="fill" type="text" maxlength="4" style="width:48px;">
-      </div>
-      <button class="copy-btn" id="c4-copyBtn">Copy Label as Image</button>
-      <div class="custom-label-notice">All fields are fillable. Paste the copied label image anywhere that supports image pasting (Word, Docs, email, etc.).</div>
+  <!-- TOOL 4 (centered, label generator, all fields, dynamic width, barcode) -->
+  <div class="t4-container" style="margin-bottom:42px;">
+    <div class="tool4-title">Centered Custom Label Generator (All Fields, Barcode, Dynamic Layout)</div>
+    <div class="t4-inputrow">
+      <input id="t4-line1" class="t4-fill" type="text" style="width:360px;" maxlength="48" placeholder=" " autocomplete="off">
     </div>
+    <div class="t4-inputrow">
+      <input id="t4-mgVal" class="t4-fill" type="text" maxlength="10" style="width:75px;">
+      <span class="t4-lbl" style="margin-left:6px;margin-right:6px;">mg PER</span>
+      <input id="t4-mlVal" class="t4-fill" type="text" maxlength="10" style="width:75px;">
+      <span class="t4-lbl" style="margin-left:6px;">mL</span>
+    </div>
+    <div class="t4-inputrow">
+      <span class="t4-lbl">LOT#</span>
+      <input id="t4-lotVal" class="t4-fill" type="text" maxlength="32" style="width:80px;" autocomplete="off">
+      <span class="t4-lbl" style="margin-left:12px;">MAN:</span>
+      <input id="t4-manVal" class="t4-fill" type="text" maxlength="32" style="width:90px;" autocomplete="off">
+    </div>
+    <div class="t4-inputrow">
+      <span class="t4-lbl">EXP:</span>
+      <input id="t4-expMonth" class="t4-fill" type="text" maxlength="2" style="width:34px;">
+      <span class="t4-lbl">/</span>
+      <input id="t4-expDay" class="t4-fill" type="text" maxlength="2" style="width:34px;">
+      <span class="t4-lbl">/</span>
+      <input id="t4-expYear" class="t4-fill" type="text" maxlength="4" style="width:48px;">
+    </div>
+    <div class="t4-inputrow">
+      <span class="t4-lbl">Barcode:</span>
+      <input id="t4-barcodeVal" class="t4-fill" type="text" maxlength="24" style="width:210px;" placeholder="Enter barcode (numbers or letters)">
+    </div>
+    <svg id="t4-barcodePreview" width="320" height="60"></svg>
+    <button class="t4-copy-btn" id="t4-copyBtn">Copy Label as Image</button>
+    <div class="t4-notice">All fields are fillable. Paste the copied label image anywhere that supports image pasting (Word, Docs, email, etc.).</div>
   </div>
 
   <script>
@@ -154,13 +162,11 @@
 
     t1copyBtn.addEventListener('click', async () => {
       t1status.textContent = ''; t1fallback.style.display = 'none';
-      // Canvas for barcode+text
       const hasBarcode = !!t1barcodeInput.value;
       const hasText = !!t1addTextInput.value;
       if (!hasBarcode && !hasText) return;
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      // Generate barcode image from SVG
       const svgXml = new XMLSerializer().serializeToString(t1barcodeSVG);
       const svgDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`;
       const img = new Image();
@@ -169,7 +175,6 @@
         img.onerror = rej;
         img.src = svgDataUrl;
       });
-      // Determine dimensions
       let textLines = [];
       let textFont = 'bold 16px Inter, Arial, sans-serif';
       ctx.font = textFont;
@@ -194,7 +199,6 @@
       textLines.forEach((line, i) => {
         ctx.fillText(line, canvas.width/2, barcodeHeight + padding + 18 + i * 22);
       });
-      // Try copy to clipboard
       canvas.toBlob(async (blob) => {
         try {
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
@@ -306,31 +310,38 @@
         const w = 320, h = 60, numberLine = 22, textLine = 21, expLotLine = 26;
         const canvas = document.createElement('canvas');
         canvas.width = w;
-        canvas.height = h + numberLine + textLine + expLotLine;
+        canvas.height = h + numberLine + textLine + expLotLine + 12;
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, w, h);
-        ctx.font = "bold 18px Inter, Arial, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#f59e42";
+
+        ctx.font = "bold 18px Inter, Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#f59e42";
         ctx.fillText(t3barnum.textContent, w/2, h + numberLine - 5);
-        ctx.font = "bold 17px Inter, Arial, sans-serif"; ctx.fillStyle = "#334155";
+
+        ctx.font = "bold 17px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#334155";
         ctx.fillText(t3displayText.textContent, w/2, h + numberLine + textLine - 8);
-        // EXP/LOT fields (left/right, underlined)
-        ctx.font = "bold 16px Inter, Arial, sans-serif"; ctx.fillStyle = "#222"; ctx.textAlign = "left";
-        const expLabel = "EXP:", lotLabel = "LOT#:";
-        const expVal = t3expInput.value || '', lotVal = t3lotInput.value || '';
-        const expX = 30, lotX = w/2 + 20, lineY = h + numberLine + textLine + expLotLine - 10;
-        ctx.fillText(expLabel, expX, lineY);
-        ctx.font = "16px Inter, Arial, sans-serif";
-        ctx.fillText(expVal, expX + 45, lineY);
-        const expWidth = Math.max(ctx.measureText(expVal||'MM/YYYY').width, 60);
-        ctx.beginPath(); ctx.moveTo(expX + 43, lineY + 2); ctx.lineTo(expX + 43 + expWidth + 5, lineY + 2);
-        ctx.strokeStyle = "#aaa"; ctx.lineWidth = 2; ctx.stroke();
+
         ctx.font = "bold 16px Inter, Arial, sans-serif";
-        ctx.fillText(lotLabel, lotX, lineY);
+        ctx.fillStyle = "#222";
+        ctx.textAlign = "left";
+        // EXP:
+        ctx.fillText("EXP:", 30, h + numberLine + textLine + expLotLine - 10);
         ctx.font = "16px Inter, Arial, sans-serif";
-        ctx.fillText(lotVal, lotX + 60, lineY);
-        const lotWidth = Math.max(ctx.measureText(lotVal||'').width, 65);
-        ctx.beginPath(); ctx.moveTo(lotX + 57, lineY + 2); ctx.lineTo(lotX + 57 + lotWidth + 5, lineY + 2); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 2; ctx.stroke();
+        ctx.fillText(t3expInput.value, 75, h + numberLine + textLine + expLotLine - 10);
+        // Line
+        ctx.beginPath(); ctx.moveTo(72, h + numberLine + textLine + expLotLine - 8);
+        ctx.lineTo(148, h + numberLine + textLine + expLotLine - 8); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 2; ctx.stroke();
+
+        ctx.font = "bold 16px Inter, Arial, sans-serif";
+        ctx.fillText("LOT#:", w/2 + 20, h + numberLine + textLine + expLotLine - 10);
+        ctx.font = "16px Inter, Arial, sans-serif";
+        ctx.fillText(t3lotInput.value, w/2 + 80, h + numberLine + textLine + expLotLine - 10);
+        ctx.beginPath(); ctx.moveTo(w/2 + 77, h + numberLine + textLine + expLotLine - 8);
+        ctx.lineTo(w/2 + 164, h + numberLine + textLine + expLotLine - 8); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 2; ctx.stroke();
+
         canvas.toBlob(async (blob) => {
           try {
             await navigator.clipboard.write([new window.ClipboardItem({ [blob.type]: blob })]);
@@ -342,30 +353,39 @@
       };
     });
 
-    // TOOL 4: Custom Label Generator
-    function drawCenteredLineInput(ctx, cx, y, width, value, labelLeft, labelRight, labelFont, valueFont, underline=true) {
-      // Draw left label if present
+    // ========== TOOL 4: Custom Label Generator (All Fields, Dynamic Width) ==========
+    // Helper to estimate width in px for bold Inter font for input value
+    function t4_getTextWidth(text, font) {
+      const canvas = t4_getTextWidth.canvas || (t4_getTextWidth.canvas = document.createElement("canvas"));
+      const context = canvas.getContext("2d");
+      context.font = font;
+      return context.measureText(text).width;
+    }
+    // Dynamic width for LOT# and MAN fields
+    function t4_updateFieldWidths() {
+      const lotInput = document.getElementById('t4-lotVal');
+      const manInput = document.getElementById('t4-manVal');
+      const maxWidth = 360, minLotWidth = 80, minManWidth = 90;
+      const lotValue = lotInput.value || '';
+      const manValue = manInput.value || '';
+      lotInput.style.width = Math.max(minLotWidth, Math.min(t4_getTextWidth(lotValue, "bold 1rem Inter") + 20, maxWidth)) + "px";
+      manInput.style.width = Math.max(minManWidth, Math.min(t4_getTextWidth(manValue, "bold 1rem Inter") + 20, maxWidth)) + "px";
+    }
+    document.getElementById("t4-lotVal").addEventListener("input", t4_updateFieldWidths);
+    document.getElementById("t4-manVal").addEventListener("input", t4_updateFieldWidths);
+
+    // Utility for drawing a centered line input (field) on canvas
+    function t4_drawCenteredLineInput(ctx, cx, y, width, value, labelLeft, labelRight, labelFont, valueFont, underline=true, bold=true) {
       let x = cx - width / 2;
       ctx.font = labelFont;
       ctx.textAlign = "right";
-      let labelLeftWidth = 0;
-      if (labelLeft) {
-        labelLeftWidth = ctx.measureText(labelLeft).width + 5;
-        ctx.fillText(labelLeft, x - 2, y + 0);
-      }
-      // Draw right label if present
+      if (labelLeft) { ctx.fillText(labelLeft, x - 2, y + 0); }
       ctx.textAlign = "left";
-      let labelRightWidth = 0;
-      if (labelRight) {
-        labelRightWidth = ctx.measureText(labelRight).width + 5;
-        ctx.fillText(labelRight, x + width + 2, y + 0);
-      }
-      // Draw value centered above the line
-      ctx.font = valueFont;
+      if (labelRight) { ctx.fillText(labelRight, x + width + 2, y + 0); }
+      ctx.font = (bold ? "bold " : "") + valueFont;
       ctx.textAlign = "center";
       ctx.fillStyle = "#222";
       if (value) ctx.fillText(value, cx, y - 3);
-      // Draw underline
       if (underline) {
         ctx.strokeStyle = "#aaa";
         ctx.lineWidth = 2;
@@ -376,9 +396,21 @@
       }
     }
 
-    document.getElementById("c4-copyBtn").onclick = function() {
-      // Canvas config: edge-to-edge, US label-friendly aspect
-      const w = 420, h = 158;
+    // Render barcode preview when barcodeVal changes
+    function t4_renderBarcodePreview() {
+      const val = document.getElementById("t4-barcodeVal").value.trim();
+      const svg = document.getElementById("t4-barcodePreview");
+      if(val) {
+        JsBarcode(svg, val, {
+          format: "CODE128", lineColor: "#222", width: 2, height: 50, margin: 0,
+          displayValue: true, fontOptions: "bold", fontSize: 18, textMargin: 2,
+        });
+      } else { svg.innerHTML = ''; }
+    }
+    document.getElementById("t4-barcodeVal").addEventListener("input", t4_renderBarcodePreview);
+
+    document.getElementById("t4-copyBtn").onclick = function() {
+      const w = 420, h = 222;
       const canvas = document.createElement("canvas");
       canvas.width = w;
       canvas.height = h;
@@ -387,23 +419,29 @@
       ctx.fillRect(0, 0, w, h);
 
       // Get all values
-      const line1 = document.getElementById("c4-line1").value;
-      const mgVal = document.getElementById("c4-mgVal").value;
-      const mlVal = document.getElementById("c4-mlVal").value;
-      const lotVal = document.getElementById("c4-lotVal").value;
-      const manVal = document.getElementById("c4-manVal").value;
-      const expMonth = document.getElementById("c4-expMonth").value;
-      const expDay = document.getElementById("c4-expDay").value;
-      const expYear = document.getElementById("c4-expYear").value;
+      const line1 = document.getElementById("t4-line1").value;
+      const mgVal = document.getElementById("t4-mgVal").value;
+      const mlVal = document.getElementById("t4-mlVal").value;
+      const lotVal = document.getElementById("t4-lotVal").value;
+      const manVal = document.getElementById("t4-manVal").value;
+      const expMonth = document.getElementById("t4-expMonth").value;
+      const expDay = document.getElementById("t4-expDay").value;
+      const expYear = document.getElementById("t4-expYear").value;
+      const barcodeVal = document.getElementById("t4-barcodeVal").value.trim();
 
-      // Center X
+      // Calculate dynamic widths for canvas
+      const lotFont = "bold 16px Inter";
+      const manFont = "bold 16px Inter";
+      const minLotWidth = 80, minManWidth = 90, maxWidth = 360;
+      const lotWidth = Math.max(minLotWidth, Math.min(t4_getTextWidth(lotVal, lotFont) + 20, maxWidth));
+      const manWidth = Math.max(minManWidth, Math.min(t4_getTextWidth(manVal, manFont) + 20, maxWidth));
+
       const cx = w / 2;
 
       // Line 1: Big underline (centered)
-      drawCenteredLineInput(ctx, cx, 36, 380, line1, "", "", "bold 18px Inter", "18px Inter");
+      t4_drawCenteredLineInput(ctx, cx, 36, 380, line1, "", "", "bold 18px Inter", "18px Inter", true, true);
 
       // Line 2: mg PER mL (centered group)
-      // Calculate positions to center as a unit
       ctx.font = "18px Inter";
       const mgWidth = 75, mlWidth = 75;
       const mgPerTxt = "mg PER";
@@ -412,38 +450,31 @@
       const mlTxtWidth = ctx.measureText(mlTxt).width + 8;
       const totalWidth2 = mgWidth + mgPerWidth + mlWidth + mlTxtWidth;
       let x2 = cx - totalWidth2 / 2;
-      // mg field
-      drawCenteredLineInput(ctx, x2 + mgWidth/2, 68, mgWidth, mgVal, "", "", "16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x2 + mgWidth/2, 68, mgWidth, mgVal, "", "", "16px Inter", "16px Inter", true, true);
       x2 += mgWidth;
-      // "mg PER"
       ctx.font = "18px Inter";
       ctx.fillStyle = "#222";
       ctx.textAlign = "left";
       ctx.fillText(mgPerTxt, x2, 66);
       x2 += mgPerWidth;
-      // ml field
-      drawCenteredLineInput(ctx, x2 + mlWidth/2, 68, mlWidth, mlVal, "", "", "16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x2 + mlWidth/2, 68, mlWidth, mlVal, "", "", "16px Inter", "16px Inter", true, true);
       x2 += mlWidth;
-      // "mL"
       ctx.font = "18px Inter";
       ctx.fillStyle = "#222";
       ctx.fillText(mlTxt, x2, 66);
 
-      // Line 3: LOT#_________ MAN:_________ (centered group)
+      // Line 3: LOT#_________ MAN:_________ (centered group, dynamic width)
       ctx.font = "bold 16px Inter";
       const lotLabel = "LOT#";
       const manLabel = "MAN:";
-      const lotWidth = 80, manWidth = 90;
       const lotLblWidth = ctx.measureText(lotLabel).width + 8;
       const manLblWidth = ctx.measureText(manLabel).width + 8;
-      const spacing3 = 24; // spacing between groups
+      const spacing3 = 24;
       const totalWidth3 = lotLblWidth + lotWidth + spacing3 + manLblWidth + manWidth;
       let x3 = cx - totalWidth3 / 2;
-      // LOT# field
-      drawCenteredLineInput(ctx, x3 + lotLblWidth + lotWidth/2, 102, lotWidth, lotVal, lotLabel, "", "bold 16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x3 + lotLblWidth + lotWidth/2, 102, lotWidth, lotVal, lotLabel, "", lotFont, "16px Inter", true, true);
       x3 += lotLblWidth + lotWidth + spacing3;
-      // MAN: field
-      drawCenteredLineInput(ctx, x3 + manLblWidth + manWidth/2, 102, manWidth, manVal, manLabel, "", "bold 16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x3 + manLblWidth + manWidth/2, 102, manWidth, manVal, manLabel, "", manFont, "16px Inter", true, true);
 
       // Line 4: EXP:__/__/____ (centered group)
       ctx.font = "16px Inter";
@@ -455,44 +486,56 @@
       const spacing4 = 4;
       const totalWidth4 = expLblWidth + expWidth + spacing4 + slashWidth + spacing4 + dayWidth + spacing4 + slashWidth + spacing4 + yearWidth;
       let x4 = cx - totalWidth4 / 2;
-      // EXP:
       ctx.font = "16px Inter";
       ctx.textAlign = "left";
       ctx.fillStyle = "#222";
       ctx.fillText(expLabel, x4, 135);
       x4 += expLblWidth;
-      // Month field
-      drawCenteredLineInput(ctx, x4 + expWidth/2, 131, expWidth, expMonth, "", "", "bold 16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x4 + expWidth/2, 131, expWidth, expMonth, "", "", "bold 16px Inter", "16px Inter", true, true);
       x4 += expWidth + spacing4;
-      // /
       ctx.font = "16px Inter";
       ctx.fillText(slash, x4, 135);
       x4 += slashWidth + spacing4;
-      // Day field
-      drawCenteredLineInput(ctx, x4 + dayWidth/2, 131, dayWidth, expDay, "", "", "bold 16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x4 + dayWidth/2, 131, dayWidth, expDay, "", "", "bold 16px Inter", "16px Inter", true, true);
       x4 += dayWidth + spacing4;
-      // /
       ctx.font = "16px Inter";
       ctx.fillText(slash, x4, 135);
       x4 += slashWidth + spacing4;
-      // Year field
-      drawCenteredLineInput(ctx, x4 + yearWidth/2, 131, yearWidth, expYear, "", "", "bold 16px Inter", "16px Inter");
+      t4_drawCenteredLineInput(ctx, x4 + yearWidth/2, 131, yearWidth, expYear, "", "", "bold 16px Inter", "16px Inter", true, true);
 
-      // Edge-to-edge: No extra padding; all content is centered and fills the canvas.
+      // Line 5: Barcode (centered, edge-to-edge)
+      if(barcodeVal) {
+        const tempBarCanvas = document.createElement('canvas');
+        tempBarCanvas.width = 320;
+        tempBarCanvas.height = 60;
+        JsBarcode(tempBarCanvas, barcodeVal, {
+          format: "CODE128",
+          lineColor: "#222",
+          width: 2,
+          height: 50,
+          margin: 0,
+          displayValue: true,
+          fontOptions: "bold",
+          fontSize: 18,
+          textMargin: 2,
+        });
+        ctx.drawImage(tempBarCanvas, (w-320)/2, 154, 320, 60);
+      }
 
       canvas.toBlob(async (blob) => {
         try {
           await navigator.clipboard.write([new window.ClipboardItem({ [blob.type]: blob })]);
-          document.getElementById("c4-copyBtn").textContent = "Copied!";
-          setTimeout(()=>{document.getElementById("c4-copyBtn").textContent = "Copy Label as Image"}, 1300);
+          document.getElementById("t4-copyBtn").textContent = "Copied!";
+          setTimeout(()=>{document.getElementById("t4-copyBtn").textContent = "Copy Label as Image"}, 1300);
         } catch(e) {
           alert("Copy failed. Try right-clicking the image to copy.");
         }
       });
     };
 
-    // Initialize all previews for empty state
-    t1update(); t2update(); t3update();
+    // On load, render barcode preview & update dynamic field widths
+    t4_renderBarcodePreview();
+    t4_updateFieldWidths();
   </script>
 </body>
 </html>
