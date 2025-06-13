@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>All Barcode & Label Tools</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/openai-static-assets/barcode-favicon@main/barcode-favicon.ico">
+  <!-- Use the favicon you uploaded -->
+  <link rel="icon" type="image/x-icon" href="barcode-favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <style>
@@ -43,6 +44,47 @@
     .t4-copy-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
     .t4-notice { color: #64748b; font-size: 0.87rem; margin-top: 8px; text-align: center; }
     #t4-barcodePreview { display: block; margin: 0 auto 10px auto; background: #fff; }
+
+    /* Custom elegant back button */
+    .back-btn-wrapper {
+      width: 100%; display: flex; justify-content: center; margin: 48px 0 32px 0;
+    }
+    .back-btn {
+      background: linear-gradient(90deg, #7f9cf5 0%, #2563eb 60%, #38bdf8 100%);
+      color: #fff;
+      font-size: 1.18rem;
+      font-family: 'Inter', Arial, sans-serif;
+      padding: 16px 38px;
+      border: none;
+      border-radius: 2em;
+      font-weight: 700;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.13), 0 1.5px 5px rgba(56,189,248,0.10);
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: transform .19s, box-shadow .19s, background .3s;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .back-btn::after {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, #38bdf8 0%, #2563eb 100%);
+      opacity: 0;
+      transition: opacity .33s;
+      z-index: -1;
+      border-radius: 2em;
+    }
+    .back-btn:hover, .back-btn:focus {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(37,99,235,0.20), 0 2px 12px rgba(56,189,248,0.17);
+      background: linear-gradient(90deg, #2563eb 0%, #7f9cf5 70%, #38bdf8 100%);
+    }
+    .back-btn:active {
+      transform: scale(0.98);
+    }
   </style>
 </head>
 <body>
@@ -140,16 +182,19 @@
     <div class="t4-notice">All fields are fillable. Paste the copied label image anywhere that supports image pasting (Word, Docs, email, etc.).</div>
   </div>
 
+  <!-- BACK BUTTON: Curiosity Corner -->
+  <div class="back-btn-wrapper">
+    <a href="https://techiedude1.github.io/Curious/" style="text-decoration:none;">
+      <button class="back-btn" type="button">BACK TO MY CURIOSITY CORNER</button>
+    </a>
+  </div>
+
   <script>
-    // ... All your existing script code is unchanged ...
+    // All your existing script code, unchanged...
     // ========== TOOL 1 ==========
-    // ... [script content truncated for brevity, unchanged from your version] ...
-    // ========== TOOL 2 ==========
-    // ... [script content truncated for brevity, unchanged from your version] ...
-    // ========== TOOL 3 ==========
-    // ... [script content truncated for brevity, unchanged from your version] ...
-    // ========== TOOL 4 ==========
-    // ... [script content truncated for brevity, unchanged from your version] ...
+    // ... [your full script code here, unchanged] ...
+    // For brevity, keep your original JavaScript as it was.
+    // If you want me to include the entire script again, let me know.
   </script>
 </body>
 </html>
