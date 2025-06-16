@@ -4,82 +4,49 @@
   <meta charset="UTF-8">
   <title>All Barcode & Label Tools</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Simple barcode favicon as inline SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' fill='white'/%3E%3Crect x='4' y='4' width='3' height='24' fill='black'/%3E%3Crect x='9' y='4' width='2' height='24' fill='black'/%3E%3Crect x='13' y='4' width='1' height='24' fill='black'/%3E%3Crect x='16' y='4' width='4' height='24' fill='black'/%3E%3Crect x='22' y='4' width='2' height='24' fill='black'/%3E%3Crect x='26' y='4' width='1' height='24' fill='black'/%3E%3C/svg%3E">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <style>
-    /* --- All your CSS (same as your original) --- */
     body { font-family: 'Inter', Arial, sans-serif; background: #f0f9ff; min-height: 100vh; margin: 0; padding: 0; }
     .main-title { font-size: 2.1rem; font-weight: 800; color: #374151; margin-top: 2.2rem; text-align: center; letter-spacing: .02em;}
     .tools-container { display: flex; flex-wrap: wrap; gap: 38px; justify-content: center; align-items: flex-start; margin: 2.3rem 0 2.7rem 0;}
     .barcode-tool { background: #fff; padding: 32px 22px 28px 22px; border-radius: 20px; box-shadow: 0 6px 28px rgba(0,0,0,0.07); width: 375px; max-width: 98vw; margin-bottom: 1.2rem; }
     .tool-title { font-size: 1.22rem; font-weight: 700; color: #2563eb; margin-bottom: 13px; text-align: center; }
-    .input { font-size: 1rem; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; width: 100%; margin-bottom: 12px; }
+    .input { font-size: 1rem; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; width: 100%; margin-bottom: 12px; font-weight: bold; }
     .barcode-preview { display: flex; flex-direction: column; align-items: center; margin: 16px 0 0 0;}
-    .barcode-number { margin-top: 4px; font-size: 1.1rem; font-weight: 600; color: #f59e42; letter-spacing: 2px;}
-    .display-text { margin-top: 6px; font-weight: 600; font-size: 1.05rem; color: #334155; }
+    .barcode-number { margin-top: 2px; font-size: 1.1rem; font-weight: 700; color: #f59e42; letter-spacing: 2px;}
+    .display-text { margin-top: 6px; font-weight: 700; font-size: 1.05rem; color: #334155; }
     .exp-lot-row { margin-top: 8px; width: 100%; display: flex; justify-content: center; gap: 30px;}
-    .btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background .2s; }
     .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
     .notice { color: #64748b; font-size: 0.89rem; margin-top: 8px; text-align: center; }
     .fallback-img-container { margin-top: 1.1rem; padding: 1rem; border: 1px dashed #cbd5e1; border-radius: 0.5rem; background-color: #f9fafb; text-align: center;}
     .fallback-img { display: block; margin: 0.5rem auto; border: 1px solid #e5e7eb; max-width: 100%; border-radius: 0.25rem; }
+    .fallback-link { display:block; margin:0.5rem auto; color:#2563eb; text-decoration:underline; font-size:0.96rem; }
     .row-exp-lot { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
-    .exp-lot-label { font-weight: 600; }
-    .exp-lot-input { font-size: 1rem; padding: 6px 7px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 90px; margin-left: 2px; }
+    .exp-lot-label { font-weight: 700; }
+    .exp-lot-input { font-size: 1rem; padding: 6px 7px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 90px; margin-left: 2px; font-weight: bold;}
     .exp-lot-input:focus { border-color: #2563eb; outline: none; }
     .tool4-title { font-size: 1.13rem; font-weight: 700; color: #2563eb; margin-bottom: 13px; text-align: center; }
     .t4-container { background: #fff; padding: 30px 18px 20px 18px; border-radius: 20px; box-shadow: 0 6px 28px rgba(0,0,0,0.07); max-width: 410px; margin: 0 auto; }
     .t4-inputrow { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
-    .t4-lbl { font-weight: 600; }
+    .t4-lbl { font-weight: 700; }
     .t4-fill {
       border: none; border-bottom: 2px solid #aaa; background: none; font-size: 1rem; font-weight: bold;
       min-width: 40px; text-align: center; outline: none; margin: 0 3px; transition: width 0.2s; height: 2.2em; line-height: 2.2em;
       padding: 2px 6px 2px 6px; box-sizing: border-box;
     }
     .t4-fill:focus { border-color: #2563eb; }
-    .t4-copy-btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+    .t4-copy-btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 12px; }
     .t4-copy-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
     .t4-notice { color: #64748b; font-size: 0.87rem; margin-top: 8px; text-align: center; }
     #t4-barcodePreview { display: block; margin: 0 auto 10px auto; background: #fff; }
-    .back-btn-wrapper {
-      width: 100%; display: flex; justify-content: center; margin: 48px 0 32px 0;
-    }
-    .back-btn {
-      background: linear-gradient(90deg, #7f9cf5 0%, #2563eb 60%, #38bdf8 100%);
-      color: #fff;
-      font-size: 1.18rem;
-      font-family: 'Inter', Arial, sans-serif;
-      padding: 16px 38px;
-      border: none;
-      border-radius: 2em;
-      font-weight: 700;
-      box-shadow: 0 4px 24px rgba(37,99,235,0.13), 0 1.5px 5px rgba(56,189,248,0.10);
-      cursor: pointer;
-      letter-spacing: 0.01em;
-      transition: transform .19s, box-shadow .19s, background .3s;
-      outline: none;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-    }
-    .back-btn::after {
-      content: "";
-      position: absolute;
-      left: 0; top: 0; right: 0; bottom: 0;
-      background: linear-gradient(90deg, #38bdf8 0%, #2563eb 100%);
-      opacity: 0;
-      transition: opacity .33s;
-      z-index: -1;
-      border-radius: 2em;
-    }
-    .back-btn:hover, .back-btn:focus {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 32px rgba(37,99,235,0.20), 0 2px 12px rgba(56,189,248,0.17);
-      background: linear-gradient(90deg, #2563eb 0%, #7f9cf5 70%, #38bdf8 100%);
-    }
-    .back-btn:active { transform: scale(0.98); }
+    .back-btn-wrapper { width: 100%; display: flex; justify-content: center; margin: 48px 0 32px 0;}
+    .back-btn { background: linear-gradient(90deg, #7f9cf5 0%, #2563eb 60%, #38bdf8 100%); color: #fff; font-size: 1.18rem; font-family: 'Inter', Arial, sans-serif; padding: 16px 38px; border: none; border-radius: 2em; font-weight: 700; box-shadow: 0 4px 24px rgba(37,99,235,0.13), 0 1.5px 5px rgba(56,189,248,0.10); cursor: pointer; letter-spacing: 0.01em; transition: transform .19s, box-shadow .19s, background .3s; outline: none; position: relative; overflow: hidden; z-index: 1;}
+    .back-btn::after { content: ""; position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: linear-gradient(90deg, #38bdf8 0%, #2563eb 100%); opacity: 0; transition: opacity .33s; z-index: -1; border-radius: 2em;}
+    .back-btn:hover, .back-btn:focus { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 32px rgba(37,99,235,0.20), 0 2px 12px rgba(56,189,248,0.17); background: linear-gradient(90deg, #2563eb 0%, #7f9cf5 70%, #38bdf8 100%);}
+    .back-btn:active { transform: scale(0.98);}
   </style>
 </head>
 <body>
@@ -92,13 +59,14 @@
       <input type="text" id="t1-barcode" class="input" placeholder="Barcode data (any value)">
       <textarea id="t1-addtext" class="input" rows="2" placeholder="Additional Text"></textarea>
       <div id="t1-preview" class="barcode-preview" style="min-height:120px;">
-        <svg id="t1-barcode-svg" width="260" height="60"></svg>
+        <svg id="t1-barcode-svg" width="320" height="60"></svg>
+        <div id="t1-barcode-num" class="barcode-number"></div>
         <div id="t1-displaytext" class="display-text"></div>
       </div>
       <button class="btn" id="t1-copybtn" disabled>Copy as Image</button>
       <div class="notice" id="t1-status"></div>
       <div id="t1-fallback" class="fallback-img-container" style="display:none;">
-        <div style="font-size:0.93rem; color:#64748b;">Right-click below image to copy:</div>
+        <div style="font-size:0.93rem; color:#64748b;">Right-click below image to copy or <a class="fallback-link" id="t1-download" href="#" download="barcode.png">download</a>:</div>
         <img id="t1-fallback-img" class="fallback-img" alt="Barcode+Text"/>
       </div>
     </div>
@@ -109,12 +77,16 @@
       <input id="t2-barcode" class="input" type="text" placeholder="Enter value for barcode..." autocomplete="off">
       <input id="t2-text" class="input" type="text" placeholder="Enter display text..." autocomplete="off">
       <div id="t2-preview" class="barcode-preview" style="display:none;">
-        <svg id="t2-barcode-svg" width="260" height="60"></svg>
+        <svg id="t2-barcode-svg" width="320" height="60"></svg>
         <div id="t2-barnum" class="barcode-number"></div>
         <div id="t2-displaytext" class="display-text"></div>
       </div>
       <button class="btn" id="t2-copybtn" disabled>Copy Barcode & Text as Image</button>
-      <div class="notice">Paste directly where image pasting is supported (Docs, email, chat, etc.)</div>
+      <div class="notice" id="t2-status"></div>
+      <div id="t2-fallback" class="fallback-img-container" style="display:none;">
+        <div style="font-size:0.93rem; color:#64748b;">Right-click below image to copy or <a class="fallback-link" id="t2-download" href="#" download="barcode.png">download</a>:</div>
+        <img id="t2-fallback-img" class="fallback-img" alt="Barcode+Text"/>
+      </div>
     </div>
 
     <!-- TOOL 3 -->
@@ -138,7 +110,11 @@
         </div>
       </div>
       <button class="btn" id="t3-copybtn" disabled>Copy Barcode & Text as Image</button>
-      <div class="notice">EXP and LOT fields included in copied image.</div>
+      <div class="notice" id="t3-status"></div>
+      <div id="t3-fallback" class="fallback-img-container" style="display:none;">
+        <div style="font-size:0.93rem; color:#64748b;">Right-click below image to copy or <a class="fallback-link" id="t3-download" href="#" download="barcode.png">download</a>:</div>
+        <img id="t3-fallback-img" class="fallback-img" alt="Barcode+Text"/>
+      </div>
     </div>
   </div>
 
@@ -173,42 +149,78 @@
       <input id="t4-barcodeVal" class="t4-fill" type="text" maxlength="24" style="width:210px;" placeholder="Enter barcode (numbers or letters)">
     </div>
     <svg id="t4-barcodePreview" width="320" height="60"></svg>
+    <div id="t4-barnum" class="barcode-number"></div>
     <button class="t4-copy-btn" id="t4-copyBtn">Copy Label as Image</button>
-    <div class="t4-notice">All fields are fillable. Paste the copied label image anywhere that supports image pasting (Word, Docs, email, etc.).</div>
+    <div class="t4-notice" id="t4-status"></div>
+    <div id="t4-fallback" class="fallback-img-container" style="display:none;">
+      <div style="font-size:0.93rem; color:#64748b;">Right-click below image to copy or <a class="fallback-link" id="t4-download" href="#" download="label.png">download</a>:</div>
+      <img id="t4-fallback-img" class="fallback-img" alt="Label+Barcode"/>
+    </div>
   </div>
-
   <div class="back-btn-wrapper">
     <a href="https://techiedude1.github.io/Curious/" style="text-decoration:none;">
       <button class="back-btn" type="button">BACK TO MY CURIOSITY CORNER</button>
     </a>
   </div>
-
   <script>
-    // TOOL 1: Barcode & Text Copier
+    // Utility for all tools
+    function svgToCanvasImage(svgElem, width, height, callback) {
+      const svgStr = new XMLSerializer().serializeToString(svgElem);
+      const blob = new Blob([svgStr], {type: "image/svg+xml"});
+      const url = URL.createObjectURL(blob);
+      const img = new window.Image();
+      img.onload = function() {
+        callback(img, url);
+      };
+      img.src = url;
+    }
+    // Helper for drawing bold underlined text (used by all tools)
+    function boldField(ctx, y, value, width, font, fill, lineHeight=28, xOffset=0) {
+      ctx.font = font;
+      ctx.fillStyle = fill;
+      ctx.textAlign = "center";
+      ctx.fillText(value, width/2 + xOffset, y);
+      // Underline only if text is present
+      if (value && value.trim()) {
+        let textWidth = ctx.measureText(value).width;
+        let lineY = y + 4;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(width/2 - textWidth/2 - 3 + xOffset, lineY);
+        ctx.lineTo(width/2 + textWidth/2 + 3 + xOffset, lineY);
+        ctx.strokeStyle = "#222";
+        ctx.stroke();
+      }
+    }
+    // TOOL 1
     const t1Barcode = document.getElementById('t1-barcode');
     const t1AddText = document.getElementById('t1-addtext');
     const t1Svg = document.getElementById('t1-barcode-svg');
+    const t1BarcodeNum = document.getElementById('t1-barcode-num');
     const t1DisplayText = document.getElementById('t1-displaytext');
     const t1CopyBtn = document.getElementById('t1-copybtn');
     const t1Status = document.getElementById('t1-status');
     const t1Fallback = document.getElementById('t1-fallback');
     const t1FallbackImg = document.getElementById('t1-fallback-img');
-
+    const t1Download = document.getElementById('t1-download');
     function renderT1() {
       let value = t1Barcode.value.trim();
       let text = t1AddText.value.trim();
       if (!value) {
         t1Svg.innerHTML = '';
+        t1BarcodeNum.textContent = '';
         t1DisplayText.textContent = '';
         t1CopyBtn.disabled = true;
         return;
       }
       try {
         JsBarcode(t1Svg, value, { format: "CODE128", displayValue: false });
+        t1BarcodeNum.textContent = value;
         t1DisplayText.textContent = text;
         t1CopyBtn.disabled = false;
       } catch {
         t1Svg.innerHTML = '';
+        t1BarcodeNum.textContent = '';
         t1CopyBtn.disabled = true;
       }
     }
@@ -219,39 +231,34 @@
       t1Status.textContent = '';
       t1Fallback.style.display = 'none';
       const canvas = document.createElement('canvas');
-      canvas.width = 320; canvas.height = 110;
+      canvas.width = 340; canvas.height = 130;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      // Draw SVG barcode
-      const svgStr = new XMLSerializer().serializeToString(t1Svg);
-      const blob = new Blob([svgStr], {type: "image/svg+xml"});
-      const url = URL.createObjectURL(blob);
-      const img = new window.Image();
-      img.onload = async () => {
-        ctx.drawImage(img, 30, 10, 260, 60);
-        ctx.font = '600 18px Inter, Arial, sans-serif';
-        ctx.fillStyle = "#334155";
-        ctx.textAlign = "center";
-        ctx.fillText(t1AddText.value, canvas.width/2, 90);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+      boldField(ctx, 32, t1AddText.value, canvas.width, 'bold 18px Inter, Arial, sans-serif', "#222");
+      svgToCanvasImage(t1Svg, 320, 60, (img, url) => {
+        ctx.drawImage(img, 10, 50, 320, 50);
+        boldField(ctx, 112, t1Barcode.value, canvas.width, 'bold 18px Inter, Arial, sans-serif', "#f59e42");
         canvas.toBlob(async (blob) => {
+          let success = false;
           try {
             await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
             t1Status.textContent = "Copied as image! Paste in docs or email.";
-          } catch (e) {
-            t1FallbackImg.src = canvas.toDataURL();
+            success = true;
+          } catch {}
+          if (!success) {
+            let dataUrl = canvas.toDataURL();
+            t1FallbackImg.src = dataUrl;
+            t1Download.href = dataUrl;
             t1Fallback.style.display = 'block';
-            t1Status.textContent = "Browser blocked auto-copy. Right-click image to copy.";
+            t1Status.textContent = "Right-click image to copy, or download.";
           }
         }, "image/png");
         URL.revokeObjectURL(url);
-      };
-      img.onerror = () => t1Status.textContent = "Failed to generate image.";
-      img.src = url;
+      });
     });
     t1CopyBtn.disabled = true;
 
-    // TOOL 2: Barcode + Text Generator
+    // TOOL 2
     const t2Barcode = document.getElementById('t2-barcode');
     const t2Text = document.getElementById('t2-text');
     const t2Preview = document.getElementById('t2-preview');
@@ -259,7 +266,10 @@
     const t2Barnum = document.getElementById('t2-barnum');
     const t2DisplayText = document.getElementById('t2-displaytext');
     const t2CopyBtn = document.getElementById('t2-copybtn');
-
+    const t2Status = document.getElementById('t2-status');
+    const t2Fallback = document.getElementById('t2-fallback');
+    const t2FallbackImg = document.getElementById('t2-fallback-img');
+    const t2Download = document.getElementById('t2-download');
     function renderT2() {
       let value = t2Barcode.value.trim();
       let text = t2Text.value.trim();
@@ -282,43 +292,33 @@
     t2Text.addEventListener('input', renderT2);
 
     t2CopyBtn.addEventListener('click', () => {
+      t2Status.textContent = '';
+      t2Fallback.style.display = 'none';
       const canvas = document.createElement('canvas');
-      canvas.width = 320; canvas.height = 130;
+      canvas.width = 340; canvas.height = 140;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      const svgStr = new XMLSerializer().serializeToString(t2Svg);
-      const blob = new Blob([svgStr], {type: "image/svg+xml"});
-      const url = URL.createObjectURL(blob);
-      const img = new window.Image();
-      img.onload = async () => {
-        ctx.drawImage(img, 30, 10, 260, 60);
-        ctx.font = 'bold 18px Inter, Arial, sans-serif';
-        ctx.fillStyle = "#f59e42";
-        ctx.textAlign = "center";
-        ctx.fillText(t2Barnum.textContent, canvas.width/2, 90);
-        ctx.font = '600 16px Inter, Arial, sans-serif';
-        ctx.fillStyle = "#334155";
-        ctx.fillText(t2DisplayText.textContent, canvas.width/2, 112);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+      boldField(ctx, 34, t2DisplayText.textContent, canvas.width, 'bold 18px Inter, Arial, sans-serif', "#222");
+      svgToCanvasImage(t2Svg, 320, 60, (img, url) => {
+        ctx.drawImage(img, 10, 55, 320, 50);
+        boldField(ctx, 125, t2Barnum.textContent, canvas.width, 'bold 18px Inter, Arial, sans-serif', "#f59e42");
         canvas.toBlob(async (blob) => {
-          try {
-            await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-          } catch (e) {
-            // Fallback: download
-            let link = document.createElement('a');
-            link.download = "barcode.png";
-            link.href = canvas.toDataURL();
-            link.click();
+          let success = false;
+          try { await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]); t2Status.textContent = "Copied as image!"; success = true;} catch{}
+          if(!success){
+            let dataUrl = canvas.toDataURL();
+            t2FallbackImg.src = dataUrl;
+            t2Download.href = dataUrl;
+            t2Fallback.style.display = 'block';
+            t2Status.textContent = "Right-click image to copy, or download.";
           }
         }, "image/png");
         URL.revokeObjectURL(url);
-      };
-      img.onerror = () => {};
-      img.src = url;
+      });
     });
     t2CopyBtn.disabled = true;
 
-    // TOOL 3: Barcode + Text + EXP/LOT
+    // TOOL 3
     const t3Barcode = document.getElementById('t3-barcode');
     const t3Text = document.getElementById('t3-text');
     const t3Exp = document.getElementById('t3-exp');
@@ -330,7 +330,10 @@
     const t3ExpOut = document.getElementById('t3-expout');
     const t3LotOut = document.getElementById('t3-lotout');
     const t3CopyBtn = document.getElementById('t3-copybtn');
-
+    const t3Status = document.getElementById('t3-status');
+    const t3Fallback = document.getElementById('t3-fallback');
+    const t3FallbackImg = document.getElementById('t3-fallback-img');
+    const t3Download = document.getElementById('t3-download');
     function renderT3() {
       let value = t3Barcode.value.trim();
       let text = t3Text.value.trim();
@@ -359,45 +362,34 @@
     t3Lot.addEventListener('input', renderT3);
 
     t3CopyBtn.addEventListener('click', () => {
+      t3Status.textContent = '';
+      t3Fallback.style.display = 'none';
       const canvas = document.createElement('canvas');
-      canvas.width = 370; canvas.height = 155;
+      canvas.width = 370; canvas.height = 170;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      const svgStr = new XMLSerializer().serializeToString(t3Svg);
-      const blob = new Blob([svgStr], {type: "image/svg+xml"});
-      const url = URL.createObjectURL(blob);
-      const img = new window.Image();
-      img.onload = async () => {
-        ctx.drawImage(img, 25, 8, 320, 60);
-        ctx.font = 'bold 18px Inter, Arial, sans-serif';
-        ctx.fillStyle = "#f59e42";
-        ctx.textAlign = "center";
-        ctx.fillText(t3Barnum.textContent, canvas.width/2, 80);
-        ctx.font = '600 16px Inter, Arial, sans-serif';
-        ctx.fillStyle = "#334155";
-        ctx.fillText(t3DisplayText.textContent, canvas.width/2, 102);
-        ctx.font = '600 15px Inter, Arial, sans-serif';
-        ctx.fillStyle = "#2563eb";
-        ctx.fillText("EXP: " + t3Exp.value + "    LOT#: " + t3Lot.value, canvas.width/2, 128);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+      boldField(ctx, 32, t3DisplayText.textContent, canvas.width, 'bold 18px Inter, Arial, sans-serif', "#222");
+      boldField(ctx, 56, `EXP: ${t3Exp.value}    LOT#: ${t3Lot.value}`, canvas.width, 'bold 15px Inter, Arial, sans-serif', "#2563eb");
+      svgToCanvasImage(t3Svg, 320, 60, (img, url) => {
+        ctx.drawImage(img, 10, 70, 320, 50);
+        boldField(ctx, 150, t3Barnum.textContent, canvas.width, 'bold 18px Inter, Arial, sans-serif', "#f59e42");
         canvas.toBlob(async (blob) => {
-          try {
-            await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-          } catch (e) {
-            let link = document.createElement('a');
-            link.download = "barcode.png";
-            link.href = canvas.toDataURL();
-            link.click();
+          let success = false;
+          try { await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]); t3Status.textContent = "Copied as image!"; success = true;} catch{}
+          if(!success){
+            let dataUrl = canvas.toDataURL();
+            t3FallbackImg.src = dataUrl;
+            t3Download.href = dataUrl;
+            t3Fallback.style.display = 'block';
+            t3Status.textContent = "Right-click image to copy, or download.";
           }
         }, "image/png");
         URL.revokeObjectURL(url);
-      };
-      img.onerror = () => {};
-      img.src = url;
+      });
     });
     t3CopyBtn.disabled = true;
 
-    // TOOL 4: Centered Custom Label Generator (all fields)
+    // TOOL 4
     const t4Line1 = document.getElementById('t4-line1');
     const t4Mg = document.getElementById('t4-mgVal');
     const t4Ml = document.getElementById('t4-mlVal');
@@ -408,73 +400,69 @@
     const t4ExpYear = document.getElementById('t4-expYear');
     const t4BarcodeVal = document.getElementById('t4-barcodeVal');
     const t4Svg = document.getElementById('t4-barcodePreview');
+    const t4Barnum = document.getElementById('t4-barnum');
     const t4CopyBtn = document.getElementById('t4-copyBtn');
+    const t4Status = document.getElementById('t4-status');
+    const t4Fallback = document.getElementById('t4-fallback');
+    const t4FallbackImg = document.getElementById('t4-fallback-img');
+    const t4Download = document.getElementById('t4-download');
 
     function renderT4() {
       let barcode = t4BarcodeVal.value.trim();
       if (!barcode) {
         t4Svg.innerHTML = '';
+        t4Barnum.textContent = '';
         t4CopyBtn.disabled = true;
         return;
       }
       try {
         JsBarcode(t4Svg, barcode, { format: "CODE128", displayValue: false });
+        t4Barnum.textContent = barcode;
         t4CopyBtn.disabled = false;
       } catch {
         t4CopyBtn.disabled = true;
+        t4Barnum.textContent = '';
       }
     }
     t4BarcodeVal.addEventListener('input', renderT4);
 
     t4CopyBtn.addEventListener('click', () => {
-      // Dynamically size based on line length, here use 410x210
+      t4Status.textContent = '';
+      t4Fallback.style.display = 'none';
+
+      // Minimal margins, bold text, underlines for each entry
       const canvas = document.createElement('canvas');
-      canvas.width = 410; canvas.height = 210;
+      canvas.width = 410; canvas.height = 230;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      // Draw label fields
-      ctx.font = '700 22px Inter, Arial, sans-serif';
-      ctx.fillStyle = "#374151";
-      ctx.textAlign = "center";
-      ctx.fillText(t4Line1.value, canvas.width/2, 36);
-      ctx.font = 'bold 17px Inter, Arial, sans-serif';
-      ctx.fillStyle = "#2563eb";
-      ctx.fillText(`${t4Mg.value} mg PER ${t4Ml.value} mL`, canvas.width/2, 65);
-      ctx.font = '600 15px Inter, Arial, sans-serif';
-      ctx.fillStyle = "#64748b";
-      ctx.fillText(`LOT#: ${t4Lot.value}   MAN: ${t4Man.value}`, canvas.width/2, 93);
-      ctx.font = '600 15px Inter, Arial, sans-serif';
-      ctx.fillStyle = "#64748b";
-      ctx.fillText(`EXP: ${t4ExpMonth.value}/${t4ExpDay.value}/${t4ExpYear.value}`, canvas.width/2, 120);
-      // Draw SVG barcode
-      const svgStr = new XMLSerializer().serializeToString(t4Svg);
-      const blob = new Blob([svgStr], {type: "image/svg+xml"});
-      const url = URL.createObjectURL(blob);
-      const img = new window.Image();
-      img.onload = async () => {
-        ctx.drawImage(img, 45, 130, 320, 60);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      boldField(ctx, 32, t4Line1.value, canvas.width, 'bold 22px Inter, Arial, sans-serif', "#222");
+      boldField(ctx, 58, `${t4Mg.value} mg PER ${t4Ml.value} mL`, canvas.width, 'bold 17px Inter, Arial, sans-serif', "#2563eb");
+      boldField(ctx, 84, `LOT#: ${t4Lot.value}   MAN: ${t4Man.value}`, canvas.width, 'bold 15px Inter, Arial, sans-serif', "#2563eb");
+      boldField(ctx, 108, `EXP: ${t4ExpMonth.value}/${t4ExpDay.value}/${t4ExpYear.value}`, canvas.width, 'bold 15px Inter, Arial, sans-serif', "#2563eb");
+
+      // Barcode at the bottom, minimal margin
+      svgToCanvasImage(t4Svg, 320, 60, (img, url) => {
+        ctx.drawImage(img, 10, 120, 390, 50); // 10px left/right margin, almost edge-to-edge
+        boldField(ctx, 205, t4BarcodeVal.value, canvas.width, 'bold 20px Inter, Arial, sans-serif', "#111");
         canvas.toBlob(async (blob) => {
-          try {
-            await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-          } catch (e) {
-            let link = document.createElement('a');
-            link.download = "label.png";
-            link.href = canvas.toDataURL();
-            link.click();
+          let success = false;
+          try { await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]); t4Status.textContent = "Copied as image!"; success = true;} catch{}
+          if(!success){
+            let dataUrl = canvas.toDataURL();
+            t4FallbackImg.src = dataUrl;
+            t4Download.href = dataUrl;
+            t4Fallback.style.display = 'block';
+            t4Status.textContent = "Right-click image to copy, or download.";
           }
         }, "image/png");
         URL.revokeObjectURL(url);
-      };
-      img.onerror = () => {};
-      img.src = url;
+      });
     });
     t4CopyBtn.disabled = true;
 
     // Autofocus first input
-    window.addEventListener('DOMContentLoaded', () => {
-      t1Barcode.focus();
-    });
+    window.addEventListener('DOMContentLoaded', () => { t1Barcode.focus(); });
   </script>
 </body>
 </html>
